@@ -102,15 +102,19 @@ var SubnauticaMap = {
             var img;
             if (d("#bg_map_image").length > 0) {
                 img = d("#bg_map_image").elems[0];
+                ctx.drawImage(img, 0, 0, this.width, this.height);
             }
             else {
+                var w = this.width, h = this.height;
                 img = document.createElement("IMG");
                 img.id = "bg_map_image";
                 img.src = "./subnautica_map.png";
                 img.style.display = "none";
                 document.body.appendChild(img);
+                img.onload = function (e) {
+                    SubnauticaMap.main.reScale(SubnauticaMap.currentScale);
+                };
             }
-            ctx.drawImage(img, 0, 0, this.width, this.height);
 
             for (var i = 0; i < thingW; i += 1) {
                 if (i == 0) continue;
