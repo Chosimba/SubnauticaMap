@@ -1,89 +1,3 @@
-// START d DECLARATION
-var dInner = {
-    dItem: function (args) {
-        this.elems = [];
-        this.length = 0;
-        if (!args) {
-
-        }
-        if (typeof args === 'string') dInner.handleCssSelector(this, args);
-        else if (typeof args === 'object') dInner.handleObject(this, args);
-    },
-    handleCssSelector: function (dItem, selector) {
-        var domElems = Array.from(document.querySelectorAll(selector));
-        domElems.forEach(function (dElem) { dItem.elems.push(dElem); });
-        dItem.length = domElems.length;
-    },
-    handleObject: function (dItem, obj) { },
-    init: function () {
-        dInner.dItem.prototype.val = function (valIn) {
-            if (!valIn) {
-                if (this.elems.length == 0) return undefined;
-                else return this.elems[0].value;
-            }
-            else {
-                if (this.elems.length == 0) return undefined;
-                else {
-                    this.elems.forEach(function (elem) {
-                        elem.value = valIn;
-                    });
-                }
-            }
-        };
-        dInner.dItem.prototype.on = function (events, func) {
-            this.elems.forEach(function (elem) {
-                elem.addEventListener(events, func);
-            });
-        };
-        dInner.dItem.prototype.each = function (func) {
-            this.elems.forEach(func);
-            return this;
-        };
-        dInner.dItem.prototype.find = function (selector) {
-            var item = new dInner.dItem();
-            this.elems.forEach(function (elem) {
-                var innerElems = Array.from(elem.querySelectorAll(selector));
-                innerElems.forEach(function (iElem) { item.elems.push(iElem); });
-            });
-            item.length = item.elems.length;
-            return item;
-        };
-        dInner.dItem.prototype.append = function (html) {
-            var elem = document.createElement('div');
-            elem.innerHTML = html;
-            var elemChildren = Array.from(elem.children);
-            this.elems.forEach(function (node) {
-                elemChildren.forEach(function (cNode) { node.appendChild(cNode.cloneNode(true)); });
-            });
-            return this;
-        };
-        dInner.dItem.prototype.html = function (newHTML) {
-            if (newHTML) {
-                this.elems.forEach(function (elem) {
-                    elem.innerHTML = newHTML;
-                })
-            }
-            else {
-                var outHTML = "";
-                this.elems.forEach(function (elem) {
-                    outHTML += elem.innerHTML;
-                });
-                return outHTML;
-            }
-        };
-    },
-    ajaxGet: function (url, data, success, failure) {
-        var f = typeof failure == 'undefined' ? function () { } : failure;
-        var s = typeof success == 'undefined' ? function () { } : success;
-    }
-
-};
-dInner.init();
-function d(selector) {
-    if (typeof document.querySelectorAll !== 'function') alert("Cannot use on this browser!");
-    return new dInner.dItem(selector);
-};
-// END d DECLARATION
 // START UTIL DECLARATION
 var Util = {
     str: {
@@ -116,12 +30,12 @@ var Util = {
 // END UTIL DECLARATION
 // START SUBNAUTICA MAP DECLARATION
 var SubnauticaMap = {
-    main: null,					// Referenct to main Map Canvas
+    main: null,					    // Referenct to main Map Canvas
     nodes: nodeJSON,				// nodeJSON loaded in via directJSON method
-    categories: categoriesJSON,  // categoriesJSON loaded in via directJSON method
-    types: typesJSON,			// typesJSON loaded in via directJSON method
+    categories: categoriesJSON,     // categoriesJSON loaded in via directJSON method
+    types: typesJSON,			    // typesJSON loaded in via directJSON method
     holder: "canvas_holder",		// id of the container div for the Main Canvas
-    currentFilters: [],		// Reference to the filters for this Map
+    currentFilters: [],		        // Reference to the filters for this Map
     currentNodes: [],
     currentScale: 50,
     currentMaxDepth: 2000,
@@ -142,12 +56,12 @@ var SubnauticaMap = {
         this.elem = elem instanceof Node ? elem :
             elem instanceof dInner.dItem ? elem.elems[0] : null;
         this.artist = this.elem.getContext("2d");
-        this.width = 4000; // 4k to encompass -2000,2000 grid
-        this.height = 4000; // 4k to encompass -2000,2000 grid
-        this.halfWidth = 2000; // 2k since half of 4k is 2k
-        this.halfHeight = 2000; // 2k since half of 4k is 2k		
+        this.width = 4000;       // 4k to encompass -2000,2000 grid
+        this.height = 4000;      // 4k to encompass -2000,2000 grid
+        this.halfWidth = 2000;   // 2k since half of 4k is 2k
+        this.halfHeight = 2000;  // 2k since half of 4k is 2k		
         this.nodeRadius = 15;	 // 15 so that circles are 30px large
-        this.scale = 50;   // 50 so that default scale is 50% of max
+        this.scale = 50;         // 50 so that default scale is 50% of max
         this.mouseOffset = 1000; // 1k since default scale is 50% by default
 
         this.artist.globalAlpha = 1;
@@ -172,12 +86,7 @@ var SubnauticaMap = {
         };
         this.Canvas.prototype.setScale = function (scale) {
             var ratio = (100 / scale);
-
             this.scale = scale;
-            // this.width 		 = this.width / ratio;
-            // this.height 	 = this.height / ratio;
-            // this.halfWidth   = parseInt(this.width / 2);
-            // this.halfHeight  = parseInt(this.height / 2);
             this.mouseOffset = (this.halfWidth / ratio);
         }
         this.Canvas.prototype.scrollTo = function (scrollTop, scrollLeft) {
@@ -395,7 +304,6 @@ var SubnauticaMap = {
         main.paintGrid(SubnauticaMap.currentCellSize);
         main.moveToOrigin();
         main.paintNodes();
-        //main.resizeContainer(main.halfWidth, main.halfHeight);
     },
     filterNodes: function () {
         SubnauticaMap.currentNodes = SubnauticaMap.nodes.filter(function (elem) {
@@ -481,7 +389,6 @@ var SubnauticaMap = {
         main.moveToOrigin();
         main.paintNodes();
         main.resizeContainer(main.halfWidth, main.halfHeight);
-        //main.scrollTo(600, 250);
     }
 };
 // END SUBNAUTICA MAP DECLARATION
