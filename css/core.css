@@ -1,167 +1,189 @@
 /* Top level declarations */
-html{
+html {
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial;
+}
 
-	height:100%;
-	overflow:hidden;
-	font-family: Arial;
-}
 div {
-	box-sizing:border-box !important;
+    box-sizing: border-box !important;
 }
-body{
-	margin:0;
-	padding:10px;	
-	height:100%;
-	background-color: cornflowerblue;
+
+body {
+    margin: 0;
+    padding: 10px;
+    height: 100%;
+    background-color: cornflowerblue;
 }
 
 /* Page declarations */
-.main-label{
-	color:white;
-	text-shadow: 1px 1px #000;
+.main-label {
+    color: white;
+    text-shadow: 1px 1px #000;
 }
 
 
-.descriptor{
-	font-weight:bold;
-	min-width: 70px;
-	display: inline-block;
+.descriptor {
+    font-weight: bold;
+    min-width: 70px;
+    display: inline-block;
 }
 
 #outer {
-	width:79%; 
-	height:800px; 
-	overflow:hidden; 
-	border:2px solid black;
-	display:inline-block;
-	background-color:black;	
+    width: 79%;
+    height: 800px;
+    overflow: hidden;
+    border: 2px solid black;
+    display: inline-block;
+    background-color: black;
 }
-	#outer #canvas_holder {
-		overflow:hidden;
-		margin: 0 auto;
-	}
-	#outer #canvas_holder canvas{
-		background-color:black;
-	}
-	#outer #info_holder {
-		position:fixed; 
-		height:120px; 
-		top:730px; 
-		left:20px;
-	}
-		#outer #info_holder .node-info {
-			background-color:white;
-			border:1px solid black;
-			box-shadow:3px 3px 3px black;
 
-		}
-			#outer #info_holder .node-info h4 {
-				text-shadow: 1px 1px #000;
-				margin:0;
-				padding:5px 40px;			
-				text-align:center;
-				background-color:cornflowerblue;
-				color:white;
-			}
-			#outer #info_holder .node-info ul {
-				padding:10px 20px;
-				margin:0;
-				list-style-type: none;
-			}
-	#outer #mouse_coords{
-		background-color:black;
-		position:fixed; 
-		padding:5px 10px;
-		font-weight:bold;
-		border-radius:5px;
-		top:100px; 
-		left:20px;	
-		color:white;
-	}
+    #outer #canvas_holder {
+        overflow: hidden;
+        margin: 0 auto;
+    }
+
+        #outer #canvas_holder canvas {
+            background-color: black;
+        }
+
+    #outer #info_holder {
+        position: fixed;
+        height: 120px;
+        top: 730px;
+        left: 20px;
+    }
+
+        #outer #info_holder .node-info {
+            background-color: white;
+            border: 1px solid black;
+            box-shadow: 3px 3px 3px black;
+        }
+
+            #outer #info_holder .node-info h4 {
+                text-shadow: 1px 1px #000;
+                margin: 0;
+                padding: 5px 40px;
+                text-align: center;
+                background-color: cornflowerblue;
+                color: white;
+            }
+
+            #outer #info_holder .node-info ul {
+                padding: 10px 20px;
+                margin: 0;
+                list-style-type: none;
+            }
+
+    #outer #mouse_coords {
+        background-color: black;
+        position: fixed;
+        padding: 5px 10px;
+        font-weight: bold;
+        border-radius: 5px;
+        top: 100px;
+        left: 20px;
+        color: white;
+    }
+
 #sidebar {
-	background-color: white;
-	width:20%; 
-	height:800px; 
-	overflow-y:scroll; 
-	border:2px solid black;
-	display:inline-block;		
-	font-size:11px;
+    background-color: white;
+    width: 20%;
+    height: 800px;
+    overflow-y: scroll;
+    border: 2px solid black;
+    display: inline-block;
+    font-size: 11px;
 }
-	#sidebar #scale_box {
-		padding:0 10px;
-	}
-		#sidebar #scale_box h4 {
-			margin: 10px 0;
-		}
-		#sidebar #scale_box ul {
-			list-style-type:none;
-			padding:0;
-		}
-		#sidebar #scale_box input {
-			margin-right:5px;
-			margin-left:0;
-		}
-	#sidebar #types_box {
-		padding:0 10px;
-	}
-		#sidebar #types_box h4 {
-			margin: 10px 0;
-		}	
-		
-		#sidebar #types_box .filter-row {
-			color:white;
-			font-weight:bold;
-			font-size:12px;
-			text-shadow: 1px 1px #000;
-		}			
-		
-	#sidebar #biomes_box {
-		padding:0 10px;
-	}
-		#sidebar #biomes_box h4 {
-			margin: 10px 0;
-		}
-		
-	#sidebar #depth_box {
-		padding:0 10px;
-	}
-		#sidebar #depth_box h4 {
-			margin: 10px 0;
-		}
-		#sidebar #depth_box .slider {
-			margin-left:20px;			
-		}
-		#sidebar #depth_box .man-input {
-			width:40px;	
-			vertical-align: top;
-			text-align:center;
-		}		
-		#sidebar #depth_box .depth-label {
-			font-size:12px;
-			padding-left:20px;
-			padding-bottom:10px;
-			padding-top:10px;
-		}
-		#sidebar .bottom-anchor{
-			padding:20px 0;
-		}
-		
+
+    #sidebar #scale_box {
+        padding: 0 10px;
+    }
+
+        #sidebar #scale_box h4 {
+            margin: 10px 0;
+        }
+
+        #sidebar #scale_box ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #sidebar #scale_box input {
+            margin-right: 5px;
+            margin-left: 0;
+        }
+
+    #sidebar #types_box {
+        padding: 0 10px;
+    }
+
+        #sidebar #types_box h4 {
+            margin: 10px 0;
+        }
+
+        #sidebar #types_box .filter-row {
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            text-shadow: 1px 1px #000;
+        }
+
+    #sidebar #biomes_box {
+        padding: 0 10px;
+    }
+
+        #sidebar #biomes_box h4 {
+            margin: 10px 0;
+        }
+
+    #sidebar #depth_box {
+        padding: 0 10px;
+    }
+
+        #sidebar #depth_box h4 {
+            margin: 10px 0;
+        }
+
+        #sidebar #depth_box .slider {
+            margin-left: 20px;
+        }
+
+        #sidebar #depth_box .man-input {
+            width: 40px;
+            vertical-align: top;
+            text-align: center;
+        }
+
+        #sidebar #depth_box .depth-label {
+            font-size: 12px;
+            padding-left: 20px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+
+    #sidebar .bottom-anchor {
+        padding: 20px 0;
+    }
+
 .filter-row {
-	width:49%; 
-	display:inline-block;
-	padding:5px 0;
-	cursor:pointer;
-}		
-	.filter-row input{
-		margin-right:10px;
-		vertical-align: sub;
-	}	
-	.filter-row label{
-		cursor:pointer;
-	}
-	
+    width: 49%;
+    display: inline-block;
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+    .filter-row input {
+        margin-right: 10px;
+        vertical-align: sub;
+    }
+
+    .filter-row label {
+        cursor: pointer;
+    }
+
 @media (max-width: 1200px) {
-.filter-row {
-	width:99%; 
-}		
-}	
+    .filter-row {
+        width: 99%;
+    }
+}

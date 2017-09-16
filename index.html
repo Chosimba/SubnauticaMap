@@ -1,71 +1,71 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Subnautica Map</title>
-	
-	<link rel="stylesheet" href="./css/core.css" />
-	
-	<script type="text/javascript" src="./scripts/directJSON.js"></script>
+
+    <link rel="stylesheet" href="./css/core.css" />
+
+    <script type="text/javascript" src="./scripts/directJSON.js"></script>
     <script type="text/javascript" src="./scripts/SubnauticaMap.js"></script>
-	
-	<!-- TEMPLATES -->
-	<script type="text/html" id="node_info_template">
-		<div id="node_info" class="node-info">
-			<h4 style="background-color:%headercolor%;">%description%</h4>
-			<ul>
-				<li><span class="descriptor">Position:</span> { x: %x% , y: %y% }</li>
-				<li><span class="descriptor">Depth:</span> %depth%m</li>
-				<li><span class="descriptor">Biome:</span> %category%</li>
-				<li><span class="descriptor">Type:</span> %type%</li>				
-			</ul>
-		</div>
-	</script>
-	<script type="text/html" id="filter_row_template">
-		<div class="filter-row" style="background:%color%;">
-			<input type="checkbox" name="%name%" id="%filtertype%_%id%" data-filtertype="%filtertype%" value="%id%" class="filter-check" checked="checked" /><label for="%filtertype%_%id%">%text%</label>
-		</div>
-	</script>
-  </head>
-  <body>
-	<h1 class="main-label">Subnautica Map</h1>
-	<div id="outer">
-		<div id="info_holder"></div>
-		<div id="mouse_coords">0 , 0</div>		
-		<div id="canvas_holder">
-			<canvas id="can"></canvas>
-		</div>
-	</div>
-	<div id="sidebar">
-		<div id="scale_box">
-			<h4>Map Scale</h4>
-			<hr />
-			<ul>
-				<li><input type="radio" name="scaleRadio" id="scale_100" value="100" /><label for="scale_100">100%</label></li>
-				<li><input type="radio" name="scaleRadio" id="scale_50"  value="50" checked="checked" /><label for="scale_100">50%</label></li>
-				<li><input type="radio" name="scaleRadio" id="scale_25"  value="25" /><label for="scale_100">25%</label></li>
-			</ul>
-		</div>
-		<div id="types_box">
-			<h4>Type Filters</h4>
-			<hr />
-			<div id="type_filters"></div>
-		</div>		
-		<div id="biomes_box">
-			<h4>Biome Filters</h4>
-			<hr />
-			<div id="biome_filters"></div>
-		</div>
-		<div id="depth_box">
-			<h4>Maximum Node Depth</h4>
-			<hr />
-			<div>
-				<div class="depth-label">Only Show Nodes Above:</div>
-				<input id="depth_slider" class="slider" type="range" min="0" max="2000" step="10" value="2000" />
-				<input id="man_depth_input" class="man-input" type="text" value="2000" />
-			</div>
-		</div>
-		<div class="bottom-anchor"></div>
-	</div>
-  </body>
+
+    <!-- TEMPLATES -->
+    <script type="text/html" id="node_info_template">
+        <div id="node_info" class="node-info">
+            <h4 style="background-color:%headercolor%;">%description%</h4>
+            <ul>
+                <li><span class="descriptor">Position:</span> { x: %x% , y: %y% }</li>
+                <li><span class="descriptor">Depth:</span> %depth%m</li>
+                <li><span class="descriptor">Biome:</span> %category%</li>
+                <li><span class="descriptor">Type:</span> %type%</li>
+            </ul>
+        </div>
+    </script>
+    <script type="text/html" id="filter_row_template">
+        <div class="filter-row" style="background:%color%;">
+            <input type="checkbox" name="%name%" id="%filtertype%_%id%" data-filtertype="%filtertype%" value="%id%" class="filter-check" checked="checked" /><label for="%filtertype%_%id%">%text%</label>
+        </div>
+    </script>
+</head>
+<body>
+    <h1 class="main-label">Subnautica Map</h1>
+    <div id="outer">
+        <div id="info_holder"></div>
+        <div id="mouse_coords">0 , 0</div>
+        <div id="canvas_holder">
+            <canvas id="can"></canvas>
+        </div>
+    </div>
+    <div id="sidebar">
+        <div id="scale_box">
+            <h4>Map Scale</h4>
+            <hr />
+            <ul>
+                <li><input type="radio" name="scaleRadio" id="scale_100" value="100" /><label for="scale_100">100%</label></li>
+                <li><input type="radio" name="scaleRadio" id="scale_50" value="50" checked="checked" /><label for="scale_100">50%</label></li>
+                <li><input type="radio" name="scaleRadio" id="scale_25" value="25" /><label for="scale_100">25%</label></li>
+            </ul>
+        </div>
+        <div id="types_box">
+            <h4>Type Filters</h4>
+            <hr />
+            <div id="type_filters"></div>
+        </div>
+        <div id="biomes_box">
+            <h4>Biome Filters</h4>
+            <hr />
+            <div id="biome_filters"></div>
+        </div>
+        <div id="depth_box">
+            <h4>Maximum Node Depth</h4>
+            <hr />
+            <div>
+                <div class="depth-label">Only Show Nodes Above:</div>
+                <input id="depth_slider" class="slider" type="range" min="0" max="2000" step="10" value="2000" />
+                <input id="man_depth_input" class="man-input" type="text" value="2000" />
+            </div>
+        </div>
+        <div class="bottom-anchor"></div>
+    </div>
+</body>
 </html>
