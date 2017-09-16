@@ -1,6 +1,5 @@
-// START SUBNAUTICA MAP DECLARATION
 var SubnauticaMap = {
-    main: null,					    // Referenct to main Map Canvas
+    main: null,					    // Reference to main Map Canvas
     nodes: nodeJSON,				// nodeJSON loaded in via directJSON method
     categories: categoriesJSON,     // categoriesJSON loaded in via directJSON method
     types: typesJSON,			    // typesJSON loaded in via directJSON method
@@ -350,19 +349,19 @@ var SubnauticaMap = {
     },
     prepareMainCanvas: function () {
         var main = this.main;
-        main.on('click', SubnauticaMap.events.CanvasClick);
-        main.on('mousemove', SubnauticaMap.events.CanvasMouseMove);
+            main.on('click', SubnauticaMap.events.CanvasClick);
+            main.on('mousemove', SubnauticaMap.events.CanvasMouseMove);
+            main.setScale(SubnauticaMap.currentScale);
+            main.setBounds();
+            main.paintGrid(SubnauticaMap.currentCellSize);
+            main.moveToOrigin();
+            main.paintNodes();
+            main.resizeContainer(main.halfWidth, main.halfHeight);
+
         d("#outer").on('wheel', SubnauticaMap.events.CanvasMouseWheel);
-        main.setScale(SubnauticaMap.currentScale);
-        main.setBounds();
-        main.paintGrid(SubnauticaMap.currentCellSize);
-        main.moveToOrigin();
-        main.paintNodes();
-        main.resizeContainer(main.halfWidth, main.halfHeight);
     }
 };
-// END SUBNAUTICA MAP DECLARATION
-// LOAD DECLARATION
+// Window Load declaration
 window.onload = function () {
     SubnauticaMap.init(); // Simply init the SubnauticaMap js object.
 };
