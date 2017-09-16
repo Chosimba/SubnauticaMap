@@ -1,13 +1,8 @@
 var Util = {
-	str: {
-		objReplace: function (string, obj) {
-			for (var prop in obj) {
-				if (obj.hasOwnProperty(prop)) {
-					var regExp = new RegExp("%" + prop + "%", "gi");
-					string = string.replace(regExp, obj[prop]);
-				}
-			}
-			return string;
+	ajax:{
+		get: function (url, data, success, failure) {
+			var f = typeof failure == 'undefined' ? function () { } : failure;
+			var s = typeof success == 'undefined' ? function () { } : success;
 		}
 	},
 	arr: {
@@ -23,6 +18,17 @@ var Util = {
 				return true;
 			}
 			return matchesProp;
+		}
+	},
+	str: {
+		objReplace: function (string, obj) {
+			for (var prop in obj) {
+				if (obj.hasOwnProperty(prop)) {
+					var regExp = new RegExp("%" + prop + "%", "gi");
+					string = string.replace(regExp, obj[prop]);
+				}
+			}
+			return string;
 		}
 	}
 };

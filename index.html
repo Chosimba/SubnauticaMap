@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="description" content="Interactive Map for Subnautica POIs">
+    <meta name="keywords" content="Subnautica, Map, Interactive">
+    <meta name="author" content="Chosimba">
+
     <title>Subnautica Map</title>
 
     <link rel="stylesheet" href="./css/core.css" />
@@ -42,11 +46,15 @@
         <div id="scale_box">
             <h4>Map Scale</h4>
             <hr />
-            <ul>
-                <li><input type="radio" name="scaleRadio" id="scale_100" value="100" /><label for="scale_100">100%</label></li>
-                <li><input type="radio" name="scaleRadio" id="scale_50" value="50" checked="checked" /><label for="scale_100">50%</label></li>
-                <li><input type="radio" name="scaleRadio" id="scale_25" value="25" /><label for="scale_100">25%</label></li>
-            </ul>
+            <div>
+                <span>Set Scale to:</span>
+                <select id="set_scale_select">
+                    <option value="10">10%</option>
+                    <option value="25">25%</option>
+                    <option value="50">50%</option>
+                    <option value="100">100%</option>
+                </select>
+            </div>
         </div>
         <div id="types_box">
             <h4>Type Filters</h4>
@@ -62,7 +70,6 @@
             <h4>Maximum Node Depth</h4>
             <hr />
             <div>
-                <div class="depth-label">Only Show Nodes Above:</div>
                 <input id="depth_slider" class="slider" type="range" min="0" max="2000" step="10" value="2000" />
                 <input id="man_depth_input" class="man-input" type="text" value="2000" />
             </div>

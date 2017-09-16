@@ -15,6 +15,33 @@ var SubnauticaMap = {
         this.artist.globalAlpha = 1;
     },
     activeNode: null,
+    bindFilterEvents: function () {
+        d("#type_filters .filter-row").on("click", function (e) {
+            if (this == e.target) this.querySelectorAll("input")[0].click();
+        });
+
+        d("#set_scale_select").on("change", function (e) {
+            var newScale = e.target.value;
+            SubnauticaMap.main.reScale(newScale);
+        });
+        d(".filter-check").on("change", function (e) {
+            var flipOn = e.target.checked;
+            var filterID = e.target.value;
+            var filterType = e.target.attributes["data-filtertype"].value;
+            var filterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj({ ID: filterID, TYPE: filterType }));
+            if (filterObj) filterObj.SHOW = flipOn;
+            SubnauticaMap.refreshMap();
+        });
+
+        d("#depth_slider").on("input", function (e) {
+            var myVal = e.target.value;
+            d("#man_depth_input").val(myVal);
+        });
+        d("#depth_slider").on("change", function (e) {
+            SubnauticaMap.currentMaxDepth = parseInt(e.target.value);
+            SubnauticaMap.refreshMap();
+        });
+    },
     categories: categoriesJSON,
     currentCellSize: 100,
     currentFilters: [],
@@ -56,8 +83,9 @@ var SubnauticaMap = {
     },
     fillFilters: function () {
         var filterTemplate = d("#filter_row_template").html();
-        var typeHTML = "";
+        var typeHTML  = "";
         var biomeHTML = "";
+
         SubnauticaMap.types.push({ "ID": -1, "NAME": "Other", "COLOR": "#DDDDDD" });
         for (var i = 0; i < SubnauticaMap.types.length; i += 1) {
             var typ = SubnauticaMap.types[i];
@@ -72,6 +100,7 @@ var SubnauticaMap = {
             var filterObj = { ID: typ.ID, TYPE: "type", SHOW: true };
             this.currentFilters.push(filterObj);
         }
+
         SubnauticaMap.categories.push({ "ID": -1, "NAME": "Other" });
         for (var i = 0; i < SubnauticaMap.categories.length; i += 1) {
             var cat = SubnauticaMap.categories[i];
@@ -85,34 +114,11 @@ var SubnauticaMap = {
             var filterObj = { ID: cat.ID, TYPE: "biome", SHOW: true };
             this.currentFilters.push(filterObj);
         }
+
         d("#type_filters").html(typeHTML);
         d("#biome_filters").html(biomeHTML);
 
-        d("#type_filters .filter-row").on("click", function (e) {
-            if (this == e.target) this.querySelectorAll("input")[0].click();
-        });
-
-        d("input[name=scaleRadio]").on("change", function (e) {
-            var newScale = e.target.value;
-            SubnauticaMap.main.reScale(newScale);
-        });
-        d(".filter-check").on("change", function (e) {
-            var flipOn = e.target.checked;
-            var filterID = e.target.value;
-            var filterType = e.target.attributes["data-filtertype"].value;
-            var filterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj({ ID: filterID, TYPE: filterType }));
-            if (filterObj) filterObj.SHOW = flipOn;
-            SubnauticaMap.refreshMap();
-        });
-
-        d("#depth_slider").on("input", function (e) {
-            var myVal = e.target.value;
-            d("#man_depth_input").val(myVal);
-        });
-        d("#depth_slider").on("change", function (e) {
-            SubnauticaMap.currentMaxDepth = parseInt(e.target.value);
-            SubnauticaMap.refreshMap();
-        });
+        SubnauticaMap.bindFilterEvents();
     },
     filterNodes: function () {
         SubnauticaMap.currentNodes = SubnauticaMap.nodes.filter(function (elem) {
