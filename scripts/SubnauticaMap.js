@@ -244,6 +244,10 @@ var SubnauticaMap = {
         d("#type_filters").html(typeHTML);
         d("#biome_filters").html(biomeHTML);
 
+        d("#type_filters .filter-row").on("click", function (e) {
+            if (this == e.target) this.querySelectorAll("input")[0].click();
+        });
+
         d("input[name=scaleRadio]").on("change", function (e) {
             var newScale = e.target.value;
             SubnauticaMap.main.reScale(newScale);

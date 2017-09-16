@@ -21,7 +21,12 @@ body {
     color: white;
     text-shadow: 1px 1px #000;
 }
-
+.disable-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 .descriptor {
     font-weight: bold;
