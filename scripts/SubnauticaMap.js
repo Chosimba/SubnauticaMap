@@ -15,6 +15,7 @@ var SubnauticaMap = {
         this.artist.globalAlpha = 1;
     },
     activeNode: null,
+    bgSrc:"./subnautica_map.png",
     bindFilterEvents: function () {
         d("#type_filters .filter-row").on("click", function (e) {
             if (this == e.target) this.querySelectorAll("input")[0].click();
@@ -30,6 +31,7 @@ var SubnauticaMap = {
             var filterType = e.target.attributes["data-filtertype"].value;
             var filterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj({ ID: filterID, TYPE: filterType }));
             if (filterObj) filterObj.SHOW = flipOn;
+            SubnauticaMap.needsFiltering = true;
             SubnauticaMap.refreshMap();
         });
 
@@ -39,6 +41,7 @@ var SubnauticaMap = {
         });
         d("#depth_slider").on("change", function (e) {
             SubnauticaMap.currentMaxDepth = parseInt(e.target.value);
+            SubnauticaMap.needsFiltering = true;
             SubnauticaMap.refreshMap();
         });
     },
@@ -159,7 +162,8 @@ var SubnauticaMap = {
         SubnauticaMap.bindFilterEvents();
     },
     filterNodes: function () {
-        SubnauticaMap.currentNodes = SubnauticaMap.nodes.filter(function (elem) {
+        if(SubnauticaMap.needsFiltering) {
+            SubnauticaMap.currentNodes = SubnauticaMap.nodes.filter(function (elem) {
             var typeSearchObj = { ID: elem.type, TYPE: "type" };
             var typeFilterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj(typeSearchObj));
             var showType = !typeFilterObj ? true : typeFilterObj.SHOW;
@@ -171,7 +175,9 @@ var SubnauticaMap = {
             var showDepth = SubnauticaMap.currentMaxDepth >= elem.coords.depth * -1;
 
             return showType && showBiome && showDepth;
-        });
+            });
+            SubnauticaMap.needsFiltering = false;
+        }
     },
     getCategoryText: function (catID) {
         var txt = SubnauticaMap.categories.find(Util.arr.findByProp("ID", catID));
@@ -187,8 +193,7 @@ var SubnauticaMap = {
     },
     holder: "canvas_holder",
     init: function () {
-        this.protos();  
-        this.main = new this.Canvas(d("#can"));
+        this.main = new Canvass(d("#can"), { containerID: SubnauticaMap.holder });
         this.load(true, "./json/dynamic.json");
     },
     isDragging:false,
@@ -245,6 +250,7 @@ var SubnauticaMap = {
         }
     },
     main: null,
+    needsFiltering:true,
     nodes: [],
     prepareMainCanvas: function () {
         var main = this.main;
@@ -252,10 +258,12 @@ var SubnauticaMap = {
             main.on('mousemove', SubnauticaMap.events.CanvasMouseMove);
             main.setScale(SubnauticaMap.currentScale);
             main.setBounds();
-            main.paintBackground();
+            main.paintBackground(SubnauticaMap.bgSrc, function () {
+                SubnauticaMap.main.reScale(SubnauticaMap.currentScale);
+            });
             if(SubnauticaMap.showGrid) main.paintGrid(SubnauticaMap.currentCellSize);
             main.moveToOrigin();
-            main.paintNodes();
+            SubnauticaMap.paintNodes();
             main.resizeContainer(main.halfWidth, main.halfHeight);
 
         d("#outer").on('wheel', SubnauticaMap.events.CanvasMouseWheel);
@@ -294,183 +302,17 @@ var SubnauticaMap = {
         });
 
     },
-    protos: function () {
-        this.Canvas.prototype.clear = function () {
-            this.artist.translate(-this.halfWidth, -this.halfHeight);
-            this.artist.clearRect(0, 0, this.elem.width, this.elem.height);
-        };
-        this.Canvas.prototype.moveToOrigin = function () {
-            var me  = this;
-            var ctx = me.artist;
-            ctx.translate(me.halfWidth, me.halfHeight);
-        };
-        this.Canvas.prototype.on = function (events, func) {
-            this.elem.addEventListener(events, func);
-        };
-        this.Canvas.prototype.paintBackground = function () {
-            var ctx = this.artist;
-            var img;
-            if (d("#bg_map_image").length > 0) {
-                img = d("#bg_map_image").elems[0];
-                ctx.drawImage(img, 0, 0, this.width, this.height);
-            }
-            else {
-                var w = this.width, h = this.height;
-                img = document.createElement("IMG");
-                img.id = "bg_map_image";
-                img.src = "./subnautica_map.png";
-                img.style.display = "none";
-                document.body.appendChild(img);
-                img.onload = function (e) {
-                    SubnauticaMap.main.reScale(SubnauticaMap.currentScale);
-                };
-            }
-        };
-        this.Canvas.prototype.paintCircle = function (x, y, radius, opts) {
-            var ctx = this.artist;
+    paintNodes:function () {
+        var me = this.main;
+        var ctx = me.artist;
 
-            
-            if (!opts) opts = { color: "green", shouldStroke: true };
-
-            
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-            ctx.fillStyle = opts.color;
-            ctx.fill();
-
-            
-            if (opts.shouldStroke) {
-                ctx.lineWidth = 3;
-                ctx.stroke();
-                ctx.lineWidth = 1;
-            }
-        };
-        this.Canvas.prototype.paintGrid = function (cellSize) {
-            var ctx = this.artist;
-            var thingW = this.width / cellSize,
-                thingH = this.height / cellSize;
-
-            for (var i = 0; i < thingW; i += 1) {
-                if (i == 0) continue;
-                var xPos = i * cellSize;
-                var isXAxis = xPos == this.halfWidth;
-
-                if (isXAxis) {
-                    ctx.strokeStyle = "blue";
-                    ctx.lineWidth = 5;
-                }
-                else {
-                    ctx.strokeStyle = "black";
-                    ctx.lineWidth = 1;
-                }
-                ctx.beginPath();
-                ctx.moveTo(xPos, 0);
-                ctx.lineTo(xPos, this.elem.height);
-                ctx.stroke();
-            }
-
-            for (var j = 0; j < thingH; j += 1) {
-                if (j == 0) continue;
-                var yPos = j * cellSize;
-                var isYAxis = yPos == this.halfHeight;
-
-                if (isYAxis) {
-                    ctx.strokeStyle = "red";
-                    ctx.lineWidth = 5;
-                }
-                else {
-                    ctx.strokeStyle = "black";
-                    ctx.lineWidth = 1;
-                }
-                ctx.beginPath();
-                ctx.moveTo(0, yPos);
-                ctx.lineTo(this.elem.width, yPos);
-                ctx.stroke();
-            }
-
-        };
-        this.Canvas.prototype.paintNodes = function () {
-            var me = this;
-            var ctx = me.artist;
-
-            SubnauticaMap.currentNodes.forEach(function (node) {
-                var flipX = node.coords.x, flipY = node.coords.y * -1;
-                me.paintCircle(flipX, flipY, me.nodeRadius, {
-                    shouldStroke: true,
-                    color: SubnauticaMap.getTypeColor(node.type)
-                });
+        SubnauticaMap.currentNodes.forEach(function (node) {
+            var flipX = node.coords.x, flipY = node.coords.y * -1;
+            me.paintCircle(flipX, flipY, me.nodeRadius, {
+                shouldStroke: true,
+                color: SubnauticaMap.getTypeColor(node.type)
             });
-        };
-        this.Canvas.prototype.paintText = function (text, x, y, opts) {
-            opts = opts || {};
-
-            var ctx = this.artist;
-            var currentFillStyle = ctx.fillStyle,
-                currentStrokeStyle = ctx.strokeStyle,
-                currentFont = ctx.font,
-                currentLineWidth = ctx.lineWidth;
-
-            ctx.font = opts.font || 'bold 48px Verdana';
-            ctx.fillStyle = opts.color || 'white';
-            ctx.fillText(text, x, y);
-            ctx.fillStyle = currentFillStyle;
-
-            if (opts.stroke) {
-                ctx.strokeStyle = opts.strokeColor || 'black';
-                ctx.lineWidth = 2;
-                ctx.strokeText(text, x, y);
-                ctx.strokeStyle = currentStrokeStyle;
-                ctx.lineWidth = currentLineWidth;
-            }
-        };
-        this.Canvas.prototype.reScale = function (newScale) {
-            SubnauticaMap.currentScale = parseInt(newScale);
-            var ratio = 100 / newScale;
-            SubnauticaMap.main.resizeContainer(SubnauticaMap.main.width / ratio, SubnauticaMap.main.height / ratio);
-            SubnauticaMap.refreshMap();
-        };
-        this.Canvas.prototype.resizeContainer = function (w, h) {
-            var holder = document.getElementById(SubnauticaMap.holder);
-            holder.style.width = w + "px";
-            holder.style.height = h + "px";
-        };
-        this.Canvas.prototype.scrollTo = function (scrollTop, scrollLeft) {
-            var holder = document.getElementById("outer");
-            holder.scrollTop = scrollTop;
-            holder.scrollLeft = scrollLeft;
-        };
-        this.Canvas.prototype.setBounds = function (w, h) {
-            if (!w && !h) {
-                this.elem.width = this.width;
-                this.elem.height = this.height;
-                this.elem.style.width = this.width + "px";
-                this.elem.style.height = this.height + "px";
-                this.halfWidth = parseInt(this.width / 2);
-                this.halfHeight = parseInt(this.height / 2);
-            }
-            else {
-                this.elem.width = w;
-                this.elem.height = h;
-
-                this.elem.style.width = w + "px";
-                this.elem.style.height = h + "px";
-
-                this.halfWidth = parseInt(w / 2);
-                this.halfHeight = parseInt(h / 2);
-            }
-            this.artist.scale(this.scale / 100, this.scale / 100);
-        };
-        this.Canvas.prototype.setCursor = function (curString) {
-            this.elem.style.cursor = curString;
-        };
-        this.Canvas.prototype.setNodeRadius = function (newRadius) {
-            if (newRadius >= 1) this.nodeRadius = newRadius;
-        };
-        this.Canvas.prototype.setScale = function (scale) {
-            var ratio = 100 / scale;
-            this.scale = scale;
-            this.mouseOffset = this.halfWidth / ratio;
-        };
+        });
     },
     refreshMap: function () {
 
@@ -483,7 +325,7 @@ var SubnauticaMap = {
         main.paintBackground();
         if (SubnauticaMap.showGrid) main.paintGrid(SubnauticaMap.currentCellSize);
         main.moveToOrigin();
-        main.paintNodes();
+        SubnauticaMap.paintNodes();
     },
     setActiveNode: function (node) {
         this.activeNode = node;
