@@ -166,7 +166,7 @@ var categoriesJSON = [
         "ID": 41,
         "NAME": "Underwater Islands Caves"
     }
-]
+];
 
 // NODE JSON
 var nodeJSON = [

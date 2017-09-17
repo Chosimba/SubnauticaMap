@@ -4,13 +4,13 @@ var SubnauticaMap = {
                     elem instanceof dInner.dItem ? elem.elems[0] : null;
 
         this.artist = this.elem.getContext("2d");
-        this.width = 4000;       // 4k to encompass -2000,2000 grid
-        this.height = 4000;      // 4k to encompass -2000,2000 grid
-        this.halfWidth = 2000;   // 2k since half of 4k is 2k
-        this.halfHeight = 2000;  // 2k since half of 4k is 2k		
-        this.nodeRadius = 15;	 // 15 so that circles are 30px large
-        this.scale = 50;         // 50 so that default scale is 50% of max
-        this.mouseOffset = 1000; // 1k since default scale is 50% by default
+        this.width = 4000;       
+        this.height = 4000;      
+        this.halfWidth = 2000;   
+        this.halfHeight = 2000;  
+        this.nodeRadius = 15;	 
+        this.scale = 50;         
+        this.mouseOffset = 1000; 
 
         this.artist.globalAlpha = 1;
     },
@@ -258,16 +258,16 @@ var SubnauticaMap = {
         this.Canvas.prototype.paintCircle = function (x, y, radius, opts) {
             var ctx = this.artist;
 
-            // Parse passed in options, or set defaults
+            
             if (!opts) opts = { color: "green", shouldStroke: true };
 
-            // Draw circle on the canvas
+            
             ctx.beginPath();
             ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
             ctx.fillStyle = opts.color;
             ctx.fill();
 
-            // Optionally, stroke the circle
+            
             if (opts.shouldStroke) {
                 ctx.lineWidth = 3;
                 ctx.stroke();
@@ -443,7 +443,7 @@ var SubnauticaMap = {
         d("#info_holder").html(freshHTML);
     }
 };
-// Window Load declaration
+
 window.onload = function () {
-    SubnauticaMap.init(); // Simply init the SubnauticaMap js object.
+    SubnauticaMap.init(); 
 };

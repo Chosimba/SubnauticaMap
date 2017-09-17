@@ -7,16 +7,16 @@ var Util = {
 	},
 	arr: {
 		findByProp: function (propIn, valueIn) {
-			var matchesProp = function (elem) { return elem[propIn] == valueIn; }
+		    var matchesProp = function (elem) { return elem[propIn] == valueIn; };
 			return matchesProp;
 		},
 		findByPropObj: function (propObjIn) {
-			var matchesProp = function (elem) {
-				for (prop in propObjIn) {
-					if (elem[prop] != propObjIn[prop]) return false;
-				}
-				return true;
-			}
+		    var matchesProp = function (elem) {
+		        for (prop in propObjIn) {
+		            if (elem[prop] != propObjIn[prop]) return false;
+		        }
+		        return true;
+		    };
 			return matchesProp;
 		}
 	},

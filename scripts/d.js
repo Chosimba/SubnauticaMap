@@ -17,11 +17,6 @@ var dInner = {
                 elem.classList.add(className);
             });
         };
-        dInner.dItem.prototype.removeClass = function (className) {
-            this.elems.forEach(function (elem) {
-                elem.classList.remove(className);
-            });
-        };
         dInner.dItem.prototype.append = function (html) {
             var elem = document.createElement('div');
             elem.innerHTML = html;
@@ -62,7 +57,7 @@ var dInner = {
             if (newHTML) {
                 this.elems.forEach(function (elem) {
                     elem.innerHTML = newHTML;
-                })
+                });
             }
             else {
                 var outHTML = "";
@@ -79,6 +74,11 @@ var dInner = {
                     elem.addEventListener(eventType, func);
                 });
 
+            });
+        };
+        dInner.dItem.prototype.removeClass = function (className) {
+            this.elems.forEach(function (elem) {
+                elem.classList.remove(className);
             });
         };
         dInner.dItem.prototype.val = function (valIn) {
