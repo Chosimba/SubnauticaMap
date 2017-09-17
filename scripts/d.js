@@ -21,6 +21,20 @@ var dInner = {
             });
             return this;
         };
+        dInner.dItem.prototype.css = function (cssObj) {
+            this.elems.forEach(function (elem) {
+                for (prop in cssObj) {
+                    switch (prop.toString().toLowerCase()) {
+                        case "top":
+                            elem.style.top = cssObj.top + "px";
+                            break;
+                        case "left":
+                            elem.style.left = cssObj.left + "px";
+                            break;
+                    }
+                }
+            });
+        };
         dInner.dItem.prototype.each = function (func) {
             this.elems.forEach(func);
             return this;

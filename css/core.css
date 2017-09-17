@@ -42,10 +42,14 @@ body {
     border: 2px solid black;
     display: inline-block;
     background-color: black;
+    position:relative;
 }
     #outer #canvas_holder {
         overflow: hidden;
-        margin: 0 auto;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:1;
     }
         #outer #canvas_holder canvas {
             background-color: black;
@@ -55,6 +59,7 @@ body {
         position: fixed;
         height: 120px;
         top: 730px;
+        z-index: 2;
         left: 20px;
     }
         #outer #info_holder .node-info {
@@ -77,6 +82,7 @@ body {
             }
 
     #outer #mouse_coords {
+        z-index: 2;
         background-color: black;
         position: fixed;
         padding: 5px 10px;

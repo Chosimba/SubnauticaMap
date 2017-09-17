@@ -56,6 +56,44 @@ var SubnauticaMap = {
             if (hoverNode == null) return;
             SubnauticaMap.updateActiveNodeData();
         },
+        HolderMouseDown: function (event) {
+            var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
+            if (hoverNode) return;
+
+            SubnauticaMap.isDragging = true;
+            SubnauticaMap.lastClickPosition = { x: event.layerX, y: event.layerY };
+
+        },
+        HolderMouseUp: function (event) {
+            SubnauticaMap.isDragging = false;
+        },
+        HolderMouseMove: function (event) {
+            if (SubnauticaMap.isDragging) {
+                var holder  = d("#canvas_holder");
+                var oldX    = SubnauticaMap.lastClickPosition.x;
+                var newX    = event.layerX;
+                var holderX = parseInt(holder.elems[0].style.left.replace("px", ""));
+
+                var oldY    = SubnauticaMap.lastClickPosition.y;
+                var newY    = event.layerY;
+                var holderY = parseInt(holder.elems[0].style.top.replace("px", ""));
+
+                var deltaX, deltaY;
+
+                if (oldX > newX) deltaX = holderX - (oldX - newX);
+                else if (oldX < newX) deltaX = holderX + (newX - oldX);
+                if (oldY > newY) deltaY = holderY - (oldY - newY);
+                else if (oldY < newY) deltaY = holderY + (newY - oldY);
+
+                window.requestAnimationFrame(function (e) { 
+                    holder.css({
+                        top: deltaY,
+                        left: deltaX
+                    });
+                })
+
+            }
+        },
         CanvasMouseMove: function (event) {
             var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
             SubnauticaMap.main.setCursor((hoverNode == null) ? "default" : "pointer");
@@ -156,6 +194,7 @@ var SubnauticaMap = {
         this.prepareMainCanvas();
         this.fillFilters();
     },
+    isDragging:false,
     isOverNode: function (x, y) {
         x = x - SubnauticaMap.main.mouseOffset, y = (y - SubnauticaMap.main.mouseOffset) * -1;
         x = x * (100 / SubnauticaMap.main.scale), y = y * (100 / SubnauticaMap.main.scale);
@@ -167,6 +206,7 @@ var SubnauticaMap = {
         }
         return null;
     },
+    lastClickPosition: {x:0,y:0},
     main: null,
     nodes: nodeJSON,
     prepareMainCanvas: function () {
@@ -181,6 +221,9 @@ var SubnauticaMap = {
         main.resizeContainer(main.halfWidth, main.halfHeight);
 
         d("#outer").on('wheel', SubnauticaMap.events.CanvasMouseWheel);
+        d("#outer").on('mousemove', SubnauticaMap.events.HolderMouseMove);
+        d("#outer").on('mousedown', SubnauticaMap.events.HolderMouseDown);
+        d("#outer").on('mouseup', SubnauticaMap.events.HolderMouseUp);
     },
     protos: function () {
         this.Canvas.prototype.clear = function () {
