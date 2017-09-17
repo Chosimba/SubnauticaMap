@@ -20,14 +20,20 @@ body {
 .main-label {
     color: white;
     text-shadow: 1px 1px #000;
+    width:99%;
 }
-
-.disable-select {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+    .main-label .mode-select {
+        float: right;
+        font-size: 16px;
+        line-height: 38px;
+    }
+    
+    .disable-select {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
 
 .descriptor {
     font-weight: bold;
@@ -42,7 +48,8 @@ body {
     border: 2px solid black;
     display: inline-block;
     background-color: black;
-    position:relative;
+    position: relative;
+    border-radius: 15px;
 }
     #outer #canvas_holder {
         overflow: hidden;
@@ -55,8 +62,8 @@ body {
             background-color: black;
         }
 
-    #outer #info_holder {
-        position: fixed;
+     #info_holder {
+        position: absolute;
         height: 120px;
         top: 730px;
         z-index: 2;
@@ -119,13 +126,19 @@ body {
             text-align: center;
             height: 19px
         }
-        #sidebar #scale_box #show_grid_check {
+        #sidebar #scale_box .map-settings-check {
             vertical-align: sub;
+            margin-right:10px;
         }
-
-        #sidebar #scale_box .man-show-grid {
-            margin-top: 10px;
-        }
+            #sidebar #scale_box .man-show-grid {
+                margin-top: 10px;
+                margin-left:10px;
+            }
+            #sidebar #scale_box .man-show-grid div {
+                padding: 5px 0 0 0;
+                width: 35%;
+                display: inline-block;
+            }
 
     #sidebar #types_box {
             padding: 0 10px;
@@ -133,13 +146,28 @@ body {
         #sidebar #types_box h4 {
             margin: 10px 0;
         }
-        #sidebar #types_box .filter-row {
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
-            text-shadow: 1px 1px #000;
-        }
 
+.multi-select-type {
+    padding: 5px 0 10px 0;
+    font-size: 12px;
+}
+.multi-select-type a{
+    padding: 0 5px;
+    font-weight:bold;
+    text-decoration:none;
+    color:black;
+}
+.multi-select-biome {
+    padding: 5px 0 10px 0;
+    font-size: 12px;
+}
+
+    .multi-select-biome a {
+        padding: 0 5px;
+        font-weight: bold;
+        text-decoration: none;
+        color: black;
+    }
     #sidebar #biomes_box {
         padding: 0 10px;
     }
@@ -147,7 +175,7 @@ body {
             margin: 10px 0;
         }
         #sidebar #biomes_box #biome_filters {
-            height: 150px;
+            height: 153px;
             overflow: hidden;
         }
         #sidebar #biomes_box #show_more_biomes {
@@ -165,20 +193,23 @@ body {
         #sidebar #depth_box h4 {
             margin: 10px 0;
         }
-        #sidebar #depth_box div {
-            width:245px;
-            margin:0 auto;
-        }
         #sidebar #depth_box .slider {
-            margin-top:10px;
             margin-left: 20px;
+            width: 150px;
+            vertical-align:middle;
         }
         #sidebar #depth_box .man-input {
             width: 40px;
             vertical-align: top;
             text-align: center;
-            margin-top: 10px;
         }
+
+.max-depth-box {
+    width: 300px;
+    margin: 10px auto 0 auto;
+}
+
+
 
     #sidebar .bottom-anchor {
         padding: 20px 0;
@@ -189,7 +220,16 @@ body {
     display: inline-block;
     padding: 5px 0;
     cursor: pointer;
+    background: dimgray;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-shadow: 1px 1px #000;
+    margin-bottom: 2px;
 }
+    .filter-row:hover {
+        background: skyblue;
+    }
     .filter-row input {
         margin-right: 10px;
         vertical-align: sub;
@@ -214,12 +254,12 @@ body {
 
 /* Key Frames */
 @keyframes expanding{
-    from{ height:150px; }
-    to { height: 620px; }
+    from{ height:153px; }
+    to { height: 649px; }
 }
 @keyframes collapsing {
-    from { height: 620px; }
-    to { height: 150px; }
+    from { height: 649px; }
+    to { height: 153px; }
 }
 
 /* Media Queries */

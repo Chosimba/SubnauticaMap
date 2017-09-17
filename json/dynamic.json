@@ -78,7 +78,7 @@
     },
     {
       "ID": 20,
-      "NAME": "Inactive Lava Zone Corridor"
+      "NAME": "ILZ Corridor"
     },
     {
       "ID": 21,
@@ -130,7 +130,7 @@
     },
     {
       "ID": 33,
-      "NAME": "Mushroom Forest Caves"
+      "NAME": "MF Caves"
     },
     {
       "ID": 34,
@@ -146,7 +146,7 @@
     },
     {
       "ID": 37,
-      "NAME": "Sea Treader's Tunnel Caves"
+      "NAME": "Sea Treader's Tunnel"
     },
     {
       "ID": 38,
@@ -162,7 +162,7 @@
     },
     {
       "ID": 41,
-      "NAME": "Underwater Islands Caves"
+      "NAME": "UI Caves"
     }
   ],
   "NODES": [

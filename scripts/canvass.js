@@ -17,8 +17,18 @@
         this.artist.globalAlpha = 1;
     }
     Canvass.prototype.clear = function () {
+        this.artist.save();
         this.artist.translate(-this.halfWidth, -this.halfHeight);
-        this.artist.clearRect(0, 0, this.elem.width, this.elem.height);
+        this.artist.clearRect(0, 0, this.width, this.height);
+        this.artist.restore();
+    };
+    Canvass.prototype.fill = function (color) {
+        this.artist.save();
+        this.artist.translate(-this.halfWidth, -this.halfHeight);
+        this.artist.scale(2,2);
+        this.artist.fillStyle = color;
+        this.artist.fillRect(0, 0, this.elem.width, this.elem.height);
+        this.artist.restore();
     };
     Canvass.prototype.moveToOrigin = function () {
         var me = this;

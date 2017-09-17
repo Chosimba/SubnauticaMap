@@ -3,24 +3,24 @@
 <head>
     <meta charset="utf-8">
     <meta name="description" content="Interactive Map for Subnautica POIs">
-    <meta name="keywords" content="Subnautica, Map, Interactive">
-    <meta name="author" content="Chosimba">
+    <meta name="keywords"    content="Subnautica, Map, Interactive">
+    <meta name="author"      content="Chosimba">
 
     <title>Subnautica Map</title>
 
     <link rel="stylesheet" href="./css/core.css" />
 
     <!--Dev Scripts-->
-    <!--<script type="text/javascript" src="./scripts/d.js"></script>
+    <script type="text/javascript" src="./scripts/d.js"></script>
     <script type="text/javascript" src="./scripts/util.js"></script>
     <script type="text/javascript" src="./scripts/canvass.js"></script>
-    <script type="text/javascript" src="./scripts/SubnauticaMap.js"></script>-->
+    <script type="text/javascript" src="./scripts/SubnauticaMap.js"></script>
 
     <!--Production Scripts-->
-    <script type="text/javascript" src="./scripts/min/d.min.js"></script>
+    <!--<script type="text/javascript" src="./scripts/min/d.min.js"></script>
     <script type="text/javascript" src="./scripts/min/util.min.js"></script>
     <script type="text/javascript" src="./scripts/min/canvass.min.js"></script>
-    <script type="text/javascript" src="./scripts/min/SubnauticaMap.min.js"></script>
+    <script type="text/javascript" src="./scripts/min/SubnauticaMap.min.js"></script>-->
 
     <!-- TEMPLATES -->
     <script type="text/html" id="node_info_template">
@@ -36,16 +36,18 @@
     </script>
     <script type="text/html" id="filter_row_template">
         <div class="filter-row disable-select" style="background:%color%;">
-            <input type="checkbox" name="%name%" id="%filtertype%_%id%" data-filtertype="%filtertype%" value="%id%" class="filter-check" checked="checked" /><label for="%filtertype%_%id%">%text%</label>
+            <input type="checkbox" name="%name%" id="%filtertype%_%id%" data-filtertype="%filtertype%" value="%id%" class="filter-check" checked="checked" />
+            <label for="%filtertype%_%id%">%text%</label>
         </div>
     </script>
 </head>
 <body>
-    <h1 class="main-label">Subnautica Map</h1>
+    <h1 class="main-label">Subnautica Map<span class="mode-select">Viewer | Player</span></h1>
     <div id="outer" class="disable-select">
-        <div id="info_holder"></div>
+
         <div id="mouse_coords">0 , 0</div>
         <div id="canvas_holder" style="top:0; left:0;">
+            <div id="info_holder"></div>
             <canvas id="can"></canvas>
         </div>
     </div>
@@ -53,36 +55,32 @@
         <div id="scale_box">
             <h4>Map Settings</h4>
             <hr />
-            <div class="man-set-scale">
-                <span>Set Scale to:</span>
-                <select id="set_scale_select">
-                    <option value="10">10%</option>
-                    <option value="25">25%</option>
-                    <option value="50">50%</option>
-                    <option value="100">100%</option>
-                </select>
-            </div>
             <div class="man-show-grid">
-                <input id="show_grid_check" type="checkbox" /><label for="show_grid_check">Show Grid</label><br />
-                <input id="cell_grid_input" type="text" value="100" /> Cell Size
+                <div><input id="show_bg_check" type="checkbox" checked="checked" class="map-settings-check" /><label for="show_bg_check">Show Biomes</label></div>
+                <div><input id="show_biome_labels" type="checkbox" checked="checked" class="map-settings-check" /><label for="show_biome_labels">With Labels</label></div>
+                <div><input id="show_grid_check" type="checkbox" class="map-settings-check" /><label for="show_grid_check">Show Grid</label></div>
+                <div><input id="show_axis_labels" type="checkbox" checked="checked" class="map-settings-check" /><label for="show_axis_labels">With Labels</label></div>
             </div>
         </div>
         <div id="types_box">
             <h4>Type Filters</h4>
             <hr />
+            <div class="multi-select-biome">Select: <a href="javascript:void(0);" data-multi="all">All</a> | <a href="javascript:void(0);" data-multi="none">None</a></div>
             <div id="type_filters"></div>
         </div>
         <div id="biomes_box">
-            <h4>Biome Filters</h4>
+            <h4>Zone Filters</h4>
             <hr />
+            <div class="multi-select-type">Select: <a href="javascript:void(0);" data-multi="all">All</a> | <a href="javascript:void(0);" data-multi="none">None</a></div>
             <div id="biome_filters"></div>
             <div id="show_more_biomes"><a class="more-link" href="javascript:void(0);">Show More</a></div>
         </div>
         <div id="depth_box">
-            <h4>Maximum Node Depth</h4>
+            <h4>Extra Filters</h4>
             <hr />
-            <div>
-                <input id="depth_slider" class="slider" type="range" min="0" max="2000" step="10" value="2000" />
+            <div class="max-depth-box">
+                <span>Max Depth:</span>
+                <input id="depth_slider" class="slider" type="range" min="0" max="2000" step="100" value="2000" />
                 <input id="man_depth_input" class="man-input" type="text" value="2000" />
             </div>
         </div>

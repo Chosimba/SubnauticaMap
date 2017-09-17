@@ -1,19 +1,4 @@
 var SubnauticaMap = {
-    Canvas: function (elem) {
-        this.elem = elem instanceof Node ? elem :
-                    elem instanceof dInner.dItem ? elem.elems[0] : null;
-
-        this.artist = this.elem.getContext("2d");
-        this.width = 4000;       
-        this.height = 4000;      
-        this.halfWidth = 2000;   
-        this.halfHeight = 2000;  
-        this.nodeRadius = 15;	 
-        this.scale = 50;         
-        this.mouseOffset = 1000; 
-
-        this.artist.globalAlpha = 1;
-    },
     activeNode: null,
     bgSrc:"./subnautica_map.png",
     bindFilterEvents: function () {
@@ -26,22 +11,24 @@ var SubnauticaMap = {
             SubnauticaMap.main.reScale(newScale);
         });
         d(".filter-check").on("change", function (e) {
-            var flipOn = e.target.checked;
-            var filterID = parseInt(e.target.value);
+            var flipOn     = e.target.checked;
+            var filterID   = parseInt(e.target.value);
             var filterType = e.target.attributes["data-filtertype"].value;
-            var filterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj({ ID: filterID, TYPE: filterType }));
+            var filterObj  = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj({ ID: filterID, TYPE: filterType }));
+
             if (filterObj) filterObj.SHOW = flipOn;
+
             SubnauticaMap.needsFiltering = true;
             SubnauticaMap.refreshMap();
         });
 
         d("#depth_slider").on("input", function (e) {
-            var myVal = e.target.value;
+            var myVal = parseInt(e.target.value);
+
             d("#man_depth_input").val(myVal);
-        });
-        d("#depth_slider").on("change", function (e) {
-            SubnauticaMap.currentMaxDepth = parseInt(e.target.value);
-            SubnauticaMap.needsFiltering = true;
+
+            SubnauticaMap.currentMaxDepth = myVal;
+            SubnauticaMap.needsFiltering  = true;
             SubnauticaMap.refreshMap();
         });
     },
@@ -289,6 +276,11 @@ var SubnauticaMap = {
             }
         });
 
+        d("#show_bg_check").on('change', function (e) {
+            SubnauticaMap.showBiomes = e.target.checked;
+            SubnauticaMap.refreshMap();
+        });
+
         d("#show_grid_check").on('change', function (e) {
             SubnauticaMap.showGrid = e.target.checked;
             SubnauticaMap.refreshMap();
@@ -322,8 +314,9 @@ var SubnauticaMap = {
         main.clear();
         main.setScale(SubnauticaMap.currentScale);
         main.setBounds();
-        main.paintBackground();
-        if (SubnauticaMap.showGrid) main.paintGrid(SubnauticaMap.currentCellSize);
+        if (SubnauticaMap.showBiomes) main.paintBackground();
+        else main.fill("white");
+        if (SubnauticaMap.showGrid)   main.paintGrid(SubnauticaMap.currentCellSize);
         main.moveToOrigin();
         SubnauticaMap.paintNodes();
     },
@@ -332,7 +325,8 @@ var SubnauticaMap = {
         if (node === null) return;
         this.needsUpdate = true;
     },
-    showGrid:false,
+    showGrid: false,
+    showBiomes:true,
     sortNodes: function () {
         SubnauticaMap.currentNodes.sort(function (a, b) {
             if (a.coords.x < b.coords.x) return -1;
