@@ -42,7 +42,7 @@ var SubnauticaMap = {
             SubnauticaMap.refreshMap();
         });
     },
-    categories: categoriesJSON,
+    categories: [],
     currentCellSize: 100,
     currentFilters: [],
     currentMaxDepth: 2000,
@@ -187,12 +187,9 @@ var SubnauticaMap = {
     },
     holder: "canvas_holder",
     init: function () {
-        this.protos();
-        this.currentNodes = this.nodes;
-        this.sortNodes();
+        this.protos();  
         this.main = new this.Canvas(d("#can"));
-        this.prepareMainCanvas();
-        this.fillFilters();
+        this.load(true, "./json/dynamic.json");
     },
     isDragging:false,
     isOverNode: function (x, y) {
@@ -207,9 +204,48 @@ var SubnauticaMap = {
         return null;
     },
     lastClickPosition: { x: 0, y: 0 },
-    lastHolderPosition: {left:0, top:0},
+    lastHolderPosition: { left: 0, top: 0 },
+    getData: function (useDirectJSON, jsonPath, cb) {
+        if (useDirectJSON) {
+            this.nodes      = nodeJSON;
+            this.categories = categoriesJSON;
+            this.types      = typesJSON;
+            var callback    = jsonPath && !cb ? jsonPath : cb;
+            if (callback) callback();
+        }
+        else {
+            Util.ajax.getJSON(jsonPath, { cb: new Date().getTime() }, function (data) {
+                SubnauticaMap.nodes      = data.NODES;
+                SubnauticaMap.categories = data.CATEGORIES;
+                SubnauticaMap.types      = data.TYPES;
+
+                var callback = jsonPath && !cb ? jsonPath : cb;
+                if (callback) callback();
+            }, function (error) {
+                if (error) { console.log(error.MESSAGE || "Unable to load"); }
+            });
+        }
+    },
+    load: function (isDynamic, dynamicPath) {
+        if (isDynamic) {
+            SubnauticaMap.getData(false, dynamicPath, function () {
+                SubnauticaMap.currentNodes = SubnauticaMap.nodes;
+                SubnauticaMap.sortNodes();
+                SubnauticaMap.prepareMainCanvas();
+                SubnauticaMap.fillFilters();
+            });
+        }
+        else {
+            SubnauticaMap.getData(true, function () {
+                SubnauticaMap.currentNodes = SubnauticaMap.nodes;
+                SubnauticaMap.sortNodes();
+                SubnauticaMap.prepareMainCanvas();
+                SubnauticaMap.fillFilters();
+            });
+        }
+    },
     main: null,
-    nodes: nodeJSON,
+    nodes: [],
     prepareMainCanvas: function () {
         var main = this.main;
             main.on('click', SubnauticaMap.events.CanvasClick);
@@ -425,7 +461,7 @@ var SubnauticaMap = {
             }
         });
     },
-    types: typesJSON,
+    types: [],
     updateActiveNodeData: function () {
         if (!this.needsUpdate) return;
 
