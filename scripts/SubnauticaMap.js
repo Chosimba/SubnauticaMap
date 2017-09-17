@@ -59,7 +59,7 @@ var SubnauticaMap = {
         CanvasMouseMove: function (event) {
             if (SubnauticaMap.isDragging) return;
             var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
-            SubnauticaMap.main.setCursor((hoverNode == null) ? "default" : "pointer");
+            SubnauticaMap.main.setCursor(hoverNode == null ? "default" : "pointer");
             var x = event.layerX, y = event.layerY;
             x = x - SubnauticaMap.main.mouseOffset, y = (y - SubnauticaMap.main.mouseOffset) * -1;
             x = x * (100 / SubnauticaMap.main.scale), y = y * (100 / SubnauticaMap.main.scale);
@@ -68,13 +68,15 @@ var SubnauticaMap = {
         CanvasMouseWheel: function (event) {
             var tempScale = 50;
 
-            if (event.deltaMode == 1) tempScale = SubnauticaMap.currentScale + (event.deltaY * -1);
+            if (event.deltaMode == 1) tempScale = SubnauticaMap.currentScale + event.deltaY * -1;
             else if (event.deltaMode == 0) {
-                var tempDelta = ((event.deltaY * 10) * -1);
+                var tempDelta = event.deltaY * 10 * -1;
                 var ratio = SubnauticaMap.main.width / tempDelta;
-                tempScale = SubnauticaMap.currentScale + (ratio);
+                tempScale = SubnauticaMap.currentScale + ratio;
             }
-            else { }
+            else {
+                tempScale = 50;
+            }
 
             if (tempScale <= 10) tempScale = 10;
             else if (tempScale >= 100) tempScale = 100;
@@ -125,30 +127,30 @@ var SubnauticaMap = {
         SubnauticaMap.types.push({ "ID": -1, "NAME": "Other", "COLOR": "#DDDDDD" });
         for (var i = 0; i < SubnauticaMap.types.length; i += 1) {
             var typ = SubnauticaMap.types[i];
-            var nam = typ.NAME.toLowerCase().replace(/ |_/g, "");
+            var typeNam = typ.NAME.toLowerCase().replace(/ |_/g, "");
             typeHTML += Util.str.objReplace(filterTemplate, {
                 filtertype: "type",
-                name: nam,
+                name: typeNam,
                 text: typ.NAME,
                 color: typ.COLOR,
-                id: typ.ID,
+                id: typ.ID
             });
-            var filterObj = { ID: typ.ID, TYPE: "type", SHOW: true };
-            this.currentFilters.push(filterObj);
+            var tfilterObj = { ID: typ.ID, TYPE: "type", SHOW: true };
+            this.currentFilters.push(tfilterObj);
         }
 
         SubnauticaMap.categories.push({ "ID": -1, "NAME": "Other" });
-        for (var i = 0; i < SubnauticaMap.categories.length; i += 1) {
-            var cat = SubnauticaMap.categories[i];
+        for (var j = 0; j < SubnauticaMap.categories.length; j += 1) {
+            var cat = SubnauticaMap.categories[j];
             var nam = cat.NAME.toLowerCase().replace(/ |_/g, "");
             biomeHTML += Util.str.objReplace(filterTemplate, {
                 filtertype: "biome",
                 text: cat.NAME,
                 name: nam,
-                id: cat.ID,
+                id: cat.ID
             });
-            var filterObj = { ID: cat.ID, TYPE: "biome", SHOW: true };
-            this.currentFilters.push(filterObj);
+            var cfilterObj = { ID: cat.ID, TYPE: "biome", SHOW: true };
+            this.currentFilters.push(cfilterObj);
         }
 
         d("#type_filters").html(typeHTML);
@@ -166,9 +168,9 @@ var SubnauticaMap = {
             var biomeFilterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj(biomeSearchObj));
             var showBiome = !biomeFilterObj ? true : biomeFilterObj.SHOW;
 
-            var showDepth = SubnauticaMap.currentMaxDepth >= (elem.coords.depth * -1);
+            var showDepth = SubnauticaMap.currentMaxDepth >= elem.coords.depth * -1;
 
-            return (showType && showBiome && showDepth);
+            return showType && showBiome && showDepth;
         });
     },
     getCategoryText: function (catID) {
@@ -297,10 +299,10 @@ var SubnauticaMap = {
 
             for (var i = 0; i < thingW; i += 1) {
                 if (i == 0) continue;
-                var xPos = (i * cellSize);
-                var isAxis = xPos == this.halfWidth;
+                var xPos = i * cellSize;
+                var isXAxis = xPos == this.halfWidth;
 
-                if (isAxis) {
+                if (isXAxis) {
                     ctx.strokeStyle = "blue";
                     ctx.lineWidth = 5;
                 }
@@ -316,10 +318,10 @@ var SubnauticaMap = {
 
             for (var j = 0; j < thingH; j += 1) {
                 if (j == 0) continue;
-                var yPos = (j * cellSize);
-                var isAxis = yPos == this.halfHeight;
+                var yPos = j * cellSize;
+                var isYAxis = yPos == this.halfHeight;
 
-                if (isAxis) {
+                if (isYAxis) {
                     ctx.strokeStyle = "red";
                     ctx.lineWidth = 5;
                 }
@@ -348,7 +350,7 @@ var SubnauticaMap = {
         };
         this.Canvas.prototype.reScale = function (newScale) {
             SubnauticaMap.currentScale = parseInt(newScale);
-            var ratio = (100 / newScale);
+            var ratio = 100 / newScale;
             SubnauticaMap.main.resizeContainer(SubnauticaMap.main.width / ratio, SubnauticaMap.main.height / ratio);
             SubnauticaMap.refreshMap();
         };
@@ -390,9 +392,9 @@ var SubnauticaMap = {
             if (newRadius >= 1) this.nodeRadius = newRadius;
         };
         this.Canvas.prototype.setScale = function (scale) {
-            var ratio = (100 / scale);
+            var ratio = 100 / scale;
             this.scale = scale;
-            this.mouseOffset = (this.halfWidth / ratio);
+            this.mouseOffset = this.halfWidth / ratio;
         };
     },
     refreshMap: function () {
