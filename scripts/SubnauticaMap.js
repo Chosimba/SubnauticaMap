@@ -57,12 +57,8 @@ var SubnauticaMap = {
             SubnauticaMap.updateActiveNodeData();
         },
         HolderMouseDown: function (event) {
-            var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
-            if (hoverNode) return;
-
             SubnauticaMap.isDragging = true;
-            SubnauticaMap.lastClickPosition = { x: event.layerX, y: event.layerY };
-
+            SubnauticaMap.lastClickPosition = { x: event.clientX, y: event.clientY };
         },
         HolderMouseUp: function (event) {
             SubnauticaMap.isDragging = false;
@@ -71,30 +67,32 @@ var SubnauticaMap = {
             if (SubnauticaMap.isDragging) {
                 var holder  = d("#canvas_holder");
                 var oldX    = SubnauticaMap.lastClickPosition.x;
-                var newX    = event.layerX;
-                var holderX = parseInt(holder.elems[0].style.left.replace("px", ""));
+                var newX    = event.clientX;
+                var holderX = SubnauticaMap.lastHolderPosition.left;
 
                 var oldY    = SubnauticaMap.lastClickPosition.y;
-                var newY    = event.layerY;
-                var holderY = parseInt(holder.elems[0].style.top.replace("px", ""));
+                var newY    = event.clientY;
+                var holderY = SubnauticaMap.lastHolderPosition.top;
 
                 var deltaX, deltaY;
 
                 if (oldX > newX) deltaX = holderX - (oldX - newX);
                 else if (oldX < newX) deltaX = holderX + (newX - oldX);
-                if (oldY > newY) deltaY = holderY - (oldY - newY);
+                else deltaX = holderX;
+
+                if (oldY > newY)      deltaY = holderY - (oldY - newY);
                 else if (oldY < newY) deltaY = holderY + (newY - oldY);
+                else deltaY = holderY;
 
-                window.requestAnimationFrame(function (e) { 
-                    holder.css({
-                        top: deltaY,
-                        left: deltaX
-                    });
-                })
+                holder.elems[0].style.top  = deltaY + "px";
+                holder.elems[0].style.left = deltaX + "px";
 
+                SubnauticaMap.lastClickPosition  = { x: event.clientX, y: event.clientY };
+                SubnauticaMap.lastHolderPosition = { left: deltaX, top: deltaY };
             }
         },
         CanvasMouseMove: function (event) {
+            if (SubnauticaMap.isDragging) return;
             var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
             SubnauticaMap.main.setCursor((hoverNode == null) ? "default" : "pointer");
             var x = event.layerX, y = event.layerY;
@@ -206,7 +204,8 @@ var SubnauticaMap = {
         }
         return null;
     },
-    lastClickPosition: {x:0,y:0},
+    lastClickPosition: { x: 0, y: 0 },
+    lastHolderPosition: {left:0, top:0},
     main: null,
     nodes: nodeJSON,
     prepareMainCanvas: function () {
