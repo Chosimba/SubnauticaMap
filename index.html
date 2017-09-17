@@ -49,9 +49,9 @@
     </div>
     <div id="sidebar">
         <div id="scale_box">
-            <h4>Map Scale</h4>
+            <h4>Map Settings</h4>
             <hr />
-            <div>
+            <div class="man-set-scale">
                 <span>Set Scale to:</span>
                 <select id="set_scale_select">
                     <option value="10">10%</option>
@@ -59,6 +59,10 @@
                     <option value="50">50%</option>
                     <option value="100">100%</option>
                 </select>
+            </div>
+            <div class="man-show-grid">
+                <input id="show_grid_check" type="checkbox" /><label for="show_grid_check">Show Grid</label><br />
+                <input id="cell_grid_input" type="text" value="100" /> Cell Size
             </div>
         </div>
         <div id="types_box">

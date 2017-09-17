@@ -280,6 +280,19 @@ var SubnauticaMap = {
                 e.target.textContent = "Show More";
             }
         });
+
+        d("#show_grid_check").on('change', function (e) {
+            SubnauticaMap.showGrid = e.target.checked;
+            SubnauticaMap.refreshMap();
+        });
+
+        d("#cell_grid_input").on("change", function (e) {
+            var targetValue = parseInt(e.target.value);
+            targetValue = targetValue < 10 ? 10 : targetValue > 1000 ? 1000 : targetValue;
+            SubnauticaMap.currentCellSize = targetValue;
+            SubnauticaMap.refreshMap();
+        });
+
     },
     protos: function () {
         this.Canvas.prototype.clear = function () {
@@ -387,6 +400,28 @@ var SubnauticaMap = {
                     color: SubnauticaMap.getTypeColor(node.type)
                 });
             });
+        };
+        this.Canvas.prototype.paintText = function (text, x, y, opts) {
+            opts = opts || {};
+
+            var ctx = this.artist;
+            var currentFillStyle = ctx.fillStyle,
+                currentStrokeStyle = ctx.strokeStyle,
+                currentFont = ctx.font,
+                currentLineWidth = ctx.lineWidth;
+
+            ctx.font = opts.font || 'bold 48px Verdana';
+            ctx.fillStyle = opts.color || 'white';
+            ctx.fillText(text, x, y);
+            ctx.fillStyle = currentFillStyle;
+
+            if (opts.stroke) {
+                ctx.strokeStyle = opts.strokeColor || 'black';
+                ctx.lineWidth = 2;
+                ctx.strokeText(text, x, y);
+                ctx.strokeStyle = currentStrokeStyle;
+                ctx.lineWidth = currentLineWidth;
+            }
         };
         this.Canvas.prototype.reScale = function (newScale) {
             SubnauticaMap.currentScale = parseInt(newScale);

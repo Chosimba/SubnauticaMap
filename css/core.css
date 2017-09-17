@@ -6,7 +6,7 @@ html {
 }
 
 div {
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 }
 
 body {
@@ -112,14 +112,26 @@ body {
             list-style-type: none;
             padding: 0;
         }
-        #sidebar #scale_box input {
-            margin-right: 5px;
-            margin-left: 0;
+        #sidebar #scale_box #set_scale_select {
+        }
+        #sidebar #scale_box #cell_grid_input {
+            width: 33px;
+            padding: 0;
+            margin-left: 30px;
+            text-align: center;
+            height: 19px
+        }
+        #sidebar #scale_box #show_grid_check {
+            vertical-align: sub;
+        }
+
+        #sidebar #scale_box .man-show-grid {
+            margin-top: 10px;
         }
 
     #sidebar #types_box {
-        padding: 0 10px;
-    }
+            padding: 0 10px;
+        }
         #sidebar #types_box h4 {
             margin: 10px 0;
         }
