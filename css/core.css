@@ -136,10 +136,22 @@ body {
         #sidebar #biomes_box h4 {
             margin: 10px 0;
         }
+        #sidebar #biomes_box #biome_filters {
+            height: 150px;
+            overflow: hidden;
+        }
+        #sidebar #biomes_box #show_more_biomes {
+            padding: 5px 0;
+            text-align: center;
+        }
+        .more-link {
+            font-weight:bold;
+            text-decoration:none;
+        }
 
     #sidebar #depth_box {
-        padding: 0 10px;
-    }
+    padding: 0 10px;
+}
         #sidebar #depth_box h4 {
             margin: 10px 0;
         }
@@ -175,6 +187,31 @@ body {
     .filter-row label {
         cursor: pointer;
     }
+
+/* Animations */
+.expand {
+    animation-name:expanding;
+    animation-duration:400ms;
+    animation-iteration-count:1;
+    animation-fill-mode:forwards;
+}
+.collapse {
+    animation-name: collapsing;
+    animation-duration: 400ms;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+/* Key Frames */
+@keyframes expanding{
+    from{ height:150px; }
+    to { height: 620px; }
+}
+@keyframes collapsing {
+    from { height: 620px; }
+    to { height: 150px; }
+}
+
 /* Media Queries */
 @media (max-width: 1200px) {
     .filter-row {

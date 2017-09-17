@@ -56,12 +56,34 @@ var SubnauticaMap = {
             if (hoverNode == null) return;
             SubnauticaMap.updateActiveNodeData();
         },
+        CanvasMouseMove: function (event) {
+            if (SubnauticaMap.isDragging) return;
+            var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
+            SubnauticaMap.main.setCursor((hoverNode == null) ? "default" : "pointer");
+            var x = event.layerX, y = event.layerY;
+            x = x - SubnauticaMap.main.mouseOffset, y = (y - SubnauticaMap.main.mouseOffset) * -1;
+            x = x * (100 / SubnauticaMap.main.scale), y = y * (100 / SubnauticaMap.main.scale);
+            d("#mouse_coords").html(parseInt(x) + " , " + parseInt(y));
+        },
+        CanvasMouseWheel: function (event) {
+            var tempScale = 50;
+
+            if (event.deltaMode == 1) tempScale = SubnauticaMap.currentScale + (event.deltaY * -1);
+            else if (event.deltaMode == 0) {
+                var tempDelta = ((event.deltaY * 10) * -1);
+                var ratio = SubnauticaMap.main.width / tempDelta;
+                tempScale = SubnauticaMap.currentScale + (ratio);
+            }
+            else { }
+
+            if (tempScale <= 10) tempScale = 10;
+            else if (tempScale >= 100) tempScale = 100;
+
+            SubnauticaMap.main.reScale(tempScale);
+        },
         HolderMouseDown: function (event) {
             SubnauticaMap.isDragging = true;
             SubnauticaMap.lastClickPosition = { x: event.clientX, y: event.clientY };
-        },
-        HolderMouseUp: function (event) {
-            SubnauticaMap.isDragging = false;
         },
         HolderMouseMove: function (event) {
             if (SubnauticaMap.isDragging) {
@@ -91,30 +113,8 @@ var SubnauticaMap = {
                 SubnauticaMap.lastHolderPosition = { left: deltaX, top: deltaY };
             }
         },
-        CanvasMouseMove: function (event) {
-            if (SubnauticaMap.isDragging) return;
-            var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
-            SubnauticaMap.main.setCursor((hoverNode == null) ? "default" : "pointer");
-            var x = event.layerX, y = event.layerY;
-            x = x - SubnauticaMap.main.mouseOffset, y = (y - SubnauticaMap.main.mouseOffset) * -1;
-            x = x * (100 / SubnauticaMap.main.scale), y = y * (100 / SubnauticaMap.main.scale);
-            d("#mouse_coords").html(parseInt(x) + " , " + parseInt(y));
-        },
-        CanvasMouseWheel: function (event) {
-            var tempScale = 50;
-
-            if (event.deltaMode == 1) tempScale = SubnauticaMap.currentScale + (event.deltaY * -1);
-            else if (event.deltaMode == 0) {
-                var tempDelta = ((event.deltaY * 10) * -1);
-                var ratio = SubnauticaMap.main.width / tempDelta;
-                tempScale = SubnauticaMap.currentScale + (ratio);
-            }
-            else { }
-
-            if (tempScale <= 10) tempScale = 10;
-            else if (tempScale >= 100) tempScale = 100;
-
-            SubnauticaMap.main.reScale(tempScale);
+        HolderMouseUp: function (event) {
+            SubnauticaMap.isDragging = false;
         }
     },
     fillFilters: function () {
@@ -210,19 +210,37 @@ var SubnauticaMap = {
     nodes: nodeJSON,
     prepareMainCanvas: function () {
         var main = this.main;
-        main.on('click', SubnauticaMap.events.CanvasClick);
-        main.on('mousemove', SubnauticaMap.events.CanvasMouseMove);
-        main.setScale(SubnauticaMap.currentScale);
-        main.setBounds();
-        main.paintGrid(SubnauticaMap.currentCellSize);
-        main.moveToOrigin();
-        main.paintNodes();
-        main.resizeContainer(main.halfWidth, main.halfHeight);
+            main.on('click', SubnauticaMap.events.CanvasClick);
+            main.on('mousemove', SubnauticaMap.events.CanvasMouseMove);
+            main.setScale(SubnauticaMap.currentScale);
+            main.setBounds();
+            main.paintGrid(SubnauticaMap.currentCellSize);
+            main.moveToOrigin();
+            main.paintNodes();
+            main.resizeContainer(main.halfWidth, main.halfHeight);
 
         d("#outer").on('wheel', SubnauticaMap.events.CanvasMouseWheel);
         d("#outer").on('mousemove', SubnauticaMap.events.HolderMouseMove);
         d("#outer").on('mousedown', SubnauticaMap.events.HolderMouseDown);
         d("#outer").on('mouseup', SubnauticaMap.events.HolderMouseUp);
+
+        d("body").on('mouseup mouseout', SubnauticaMap.events.HolderMouseUp);
+
+        d(".more-link").on('click', function (e) {
+            var isExpanding = e.target.textContent.toLowerCase() == "show more";
+            var filterBox   = d("#biome_filters");
+
+            if (isExpanding) {
+                filterBox.removeClass("collapse");
+                filterBox.addClass("expand");
+                e.target.textContent = "Show Less";
+            }
+            else {
+                filterBox.removeClass("expand");
+                filterBox.addClass("collapse");
+                e.target.textContent = "Show More";
+            }
+        });
     },
     protos: function () {
         this.Canvas.prototype.clear = function () {

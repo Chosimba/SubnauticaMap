@@ -12,6 +12,16 @@ var dInner = {
     },
     handleObject: function (dItem, obj) { },
     init: function () {
+        dInner.dItem.prototype.addClass = function (className) {
+            this.elems.forEach(function (elem) {
+                elem.classList.add(className);
+            });
+        };
+        dInner.dItem.prototype.removeClass = function (className) {
+            this.elems.forEach(function (elem) {
+                elem.classList.remove(className);
+            });
+        };
         dInner.dItem.prototype.append = function (html) {
             var elem = document.createElement('div');
             elem.innerHTML = html;
@@ -64,7 +74,11 @@ var dInner = {
         };
         dInner.dItem.prototype.on = function (events, func) {
             this.elems.forEach(function (elem) {
-                elem.addEventListener(events, func);
+                var eventList = events.split(" ");
+                eventList.forEach(function (eventType) {
+                    elem.addEventListener(eventType, func);
+                });
+
             });
         };
         dInner.dItem.prototype.val = function (valIn) {
