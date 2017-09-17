@@ -252,7 +252,8 @@ var SubnauticaMap = {
             main.on('mousemove', SubnauticaMap.events.CanvasMouseMove);
             main.setScale(SubnauticaMap.currentScale);
             main.setBounds();
-            main.paintGrid(SubnauticaMap.currentCellSize);
+            main.paintBackground();
+            if(SubnauticaMap.showGrid) main.paintGrid(SubnauticaMap.currentCellSize);
             main.moveToOrigin();
             main.paintNodes();
             main.resizeContainer(main.halfWidth, main.halfHeight);
@@ -293,6 +294,25 @@ var SubnauticaMap = {
         this.Canvas.prototype.on = function (events, func) {
             this.elem.addEventListener(events, func);
         };
+        this.Canvas.prototype.paintBackground = function () {
+            var ctx = this.artist;
+            var img;
+            if (d("#bg_map_image").length > 0) {
+                img = d("#bg_map_image").elems[0];
+                ctx.drawImage(img, 0, 0, this.width, this.height);
+            }
+            else {
+                var w = this.width, h = this.height;
+                img = document.createElement("IMG");
+                img.id = "bg_map_image";
+                img.src = "./subnautica_map.png";
+                img.style.display = "none";
+                document.body.appendChild(img);
+                img.onload = function (e) {
+                    SubnauticaMap.main.reScale(SubnauticaMap.currentScale);
+                };
+            }
+        };
         this.Canvas.prototype.paintCircle = function (x, y, radius, opts) {
             var ctx = this.artist;
 
@@ -316,22 +336,6 @@ var SubnauticaMap = {
             var ctx = this.artist;
             var thingW = this.width / cellSize,
                 thingH = this.height / cellSize;
-            var img;
-            if (d("#bg_map_image").length > 0) {
-                img = d("#bg_map_image").elems[0];
-                ctx.drawImage(img, 0, 0, this.width, this.height);
-            }
-            else {
-                var w = this.width, h = this.height;
-                img = document.createElement("IMG");
-                img.id = "bg_map_image";
-                img.src = "./subnautica_map.png";
-                img.style.display = "none";
-                document.body.appendChild(img);
-                img.onload = function (e) {
-                    SubnauticaMap.main.reScale(SubnauticaMap.currentScale);
-                };
-            }
 
             for (var i = 0; i < thingW; i += 1) {
                 if (i == 0) continue;
@@ -441,7 +445,8 @@ var SubnauticaMap = {
         main.clear();
         main.setScale(SubnauticaMap.currentScale);
         main.setBounds();
-        main.paintGrid(SubnauticaMap.currentCellSize);
+        main.paintBackground();
+        if (SubnauticaMap.showGrid) main.paintGrid(SubnauticaMap.currentCellSize);
         main.moveToOrigin();
         main.paintNodes();
     },
@@ -450,6 +455,7 @@ var SubnauticaMap = {
         if (node == null) return;
         this.needsUpdate = true;
     },
+    showGrid:false,
     sortNodes: function () {
         SubnauticaMap.currentNodes.sort(function (a, b) {
             if (a.coords.x < b.coords.x) return -1;
