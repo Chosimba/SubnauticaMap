@@ -83,11 +83,11 @@ var dInner = {
         };
         dInner.dItem.prototype.val = function (valIn) {
             if (!valIn) {
-                if (this.elems.length == 0) return undefined;
+                if (this.elems.length === 0) return undefined;
                 else return this.elems[0].value;
             }
             else {
-                if (this.elems.length == 0) return undefined;
+                if (this.elems.length === 0) return undefined;
                 else {
                     this.elems.forEach(function (elem) {
                         elem.value = valIn;
@@ -101,4 +101,4 @@ dInner.init();
 function d(selector) {
     if (typeof document.querySelectorAll !== 'function') alert("Cannot use on this browser!");
     return new dInner.dItem(selector);
-};
+}

@@ -18,7 +18,7 @@ var SubnauticaMap = {
     bgSrc:"./subnautica_map.png",
     bindFilterEvents: function () {
         d("#type_filters .filter-row").on("click", function (e) {
-            if (this == e.target) this.querySelectorAll("input")[0].click();
+            if (this === e.target) this.querySelectorAll("input")[0].click();
         });
 
         d("#set_scale_select").on("change", function (e) {
@@ -27,7 +27,7 @@ var SubnauticaMap = {
         });
         d(".filter-check").on("change", function (e) {
             var flipOn = e.target.checked;
-            var filterID = e.target.value;
+            var filterID = parseInt(e.target.value);
             var filterType = e.target.attributes["data-filtertype"].value;
             var filterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj({ ID: filterID, TYPE: filterType }));
             if (filterObj) filterObj.SHOW = flipOn;
@@ -56,13 +56,13 @@ var SubnauticaMap = {
             var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
             SubnauticaMap.setActiveNode(hoverNode);
 
-            if (hoverNode == null) return;
+            if (hoverNode === null) return;
             SubnauticaMap.updateActiveNodeData();
         },
         CanvasMouseMove: function (event) {
             if (SubnauticaMap.isDragging) return;
             var hoverNode = SubnauticaMap.isOverNode(event.layerX, event.layerY);
-            SubnauticaMap.main.setCursor(hoverNode == null ? "default" : "pointer");
+            SubnauticaMap.main.setCursor(hoverNode === null ? "default" : "pointer");
             var x = event.layerX, y = event.layerY;
             x = x - SubnauticaMap.main.mouseOffset, y = (y - SubnauticaMap.main.mouseOffset) * -1;
             x = x * (100 / SubnauticaMap.main.scale), y = y * (100 / SubnauticaMap.main.scale);
@@ -71,8 +71,8 @@ var SubnauticaMap = {
         CanvasMouseWheel: function (event) {
             var tempScale = 50;
 
-            if (event.deltaMode == 1) tempScale = SubnauticaMap.currentScale + event.deltaY * -1;
-            else if (event.deltaMode == 0) {
+            if (event.deltaMode === 1) tempScale = SubnauticaMap.currentScale + event.deltaY * -1;
+            else if (event.deltaMode === 0) {
                 var tempDelta = event.deltaY * 10 * -1;
                 var ratio = SubnauticaMap.main.width / tempDelta;
                 tempScale = SubnauticaMap.currentScale + ratio;
@@ -164,17 +164,17 @@ var SubnauticaMap = {
     filterNodes: function () {
         if(SubnauticaMap.needsFiltering) {
             SubnauticaMap.currentNodes = SubnauticaMap.nodes.filter(function (elem) {
-            var typeSearchObj = { ID: elem.type, TYPE: "type" };
-            var typeFilterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj(typeSearchObj));
-            var showType = !typeFilterObj ? true : typeFilterObj.SHOW;
+                var typeSearchObj = { ID: elem.type, TYPE: "type" };
+                var typeFilterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj(typeSearchObj));
+                var showType = !typeFilterObj ? true : typeFilterObj.SHOW;
 
-            var biomeSearchObj = { ID: elem.category, TYPE: "biome" };
-            var biomeFilterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj(biomeSearchObj));
-            var showBiome = !biomeFilterObj ? true : biomeFilterObj.SHOW;
+                var biomeSearchObj = { ID: elem.category, TYPE: "biome" };
+                var biomeFilterObj = SubnauticaMap.currentFilters.find(Util.arr.findByPropObj(biomeSearchObj));
+                var showBiome = !biomeFilterObj ? true : biomeFilterObj.SHOW;
 
-            var showDepth = SubnauticaMap.currentMaxDepth >= elem.coords.depth * -1;
+                var showDepth = SubnauticaMap.currentMaxDepth >= elem.coords.depth * -1;
 
-            return showType && showBiome && showDepth;
+                return showType && showBiome && showDepth;
             });
             SubnauticaMap.needsFiltering = false;
         }
@@ -274,7 +274,7 @@ var SubnauticaMap = {
         d("body").on('mouseup mouseout', SubnauticaMap.events.HolderMouseUp);
 
         d(".more-link").on('click', function (e) {
-            var isExpanding = e.target.textContent.toLowerCase() == "show more";
+            var isExpanding = e.target.textContent.toLowerCase() === "show more";
             var filterBox   = d("#biome_filters");
 
             if (isExpanding) {
@@ -329,7 +329,7 @@ var SubnauticaMap = {
     },
     setActiveNode: function (node) {
         this.activeNode = node;
-        if (node == null) return;
+        if (node === null) return;
         this.needsUpdate = true;
     },
     showGrid:false,

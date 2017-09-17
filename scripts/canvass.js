@@ -66,9 +66,9 @@
             thingH = this.height / cellSize;
 
         for (var i = 0; i < thingW; i += 1) {
-            if (i == 0) continue;
+            if (i === 0) continue;
             var xPos = i * cellSize;
-            var isXAxis = xPos == this.halfWidth;
+            var isXAxis = xPos === this.halfWidth;
 
             if (isXAxis) {
                 ctx.strokeStyle = "blue";
@@ -85,9 +85,9 @@
         }
 
         for (var j = 0; j < thingH; j += 1) {
-            if (j == 0) continue;
+            if (j === 0) continue;
             var yPos = j * cellSize;
-            var isYAxis = yPos == this.halfHeight;
+            var isYAxis = yPos === this.halfHeight;
 
             if (isYAxis) {
                 ctx.strokeStyle = "red";

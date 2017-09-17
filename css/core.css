@@ -112,8 +112,6 @@ body {
             list-style-type: none;
             padding: 0;
         }
-        #sidebar #scale_box #set_scale_select {
-        }
         #sidebar #scale_box #cell_grid_input {
             width: 33px;
             padding: 0;
