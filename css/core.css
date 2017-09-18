@@ -28,7 +28,7 @@ body {
         line-height: 38px;
     }
     
-    .disable-select {
+.disable-select {
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -61,20 +61,27 @@ body {
         #outer #canvas_holder canvas {
             background-color: black;
         }
-
-     #info_holder {
-        position: absolute;
-        height: 120px;
-        top: 730px;
-        z-index: 2;
-        left: 20px;
-    }
+        #floating_outer {
+            position: absolute;
+            top: 730px;
+            left: 20px;
+            z-index: 2;
+        }
+#info_holder {
+    position: absolute;
+    height: 120px;
+    top: 0px;
+    left: 0px;
+    opacity: 0;
+    min-width:250px;
+}
         #outer #info_holder .node-info {
             background-color: white;
             border: 1px solid black;
             box-shadow: 3px 3px 3px black;
         }
             #outer #info_holder .node-info h4 {
+                white-space: nowrap;
                 text-shadow: 1px 1px #000;
                 margin: 0;
                 padding: 5px 40px;
@@ -151,7 +158,7 @@ body {
     padding: 5px 0 10px 0;
     font-size: 12px;
 }
-.multi-select-type a{
+    .multi-select-type a{
     padding: 0 5px;
     font-weight:bold;
     text-decoration:none;
@@ -161,13 +168,13 @@ body {
     padding: 5px 0 10px 0;
     font-size: 12px;
 }
-
     .multi-select-biome a {
         padding: 0 5px;
         font-weight: bold;
         text-decoration: none;
         color: black;
     }
+
     #sidebar #biomes_box {
         padding: 0 10px;
     }
@@ -209,8 +216,6 @@ body {
     margin: 10px auto 0 auto;
 }
 
-
-
     #sidebar .bottom-anchor {
         padding: 20px 0;
     }
@@ -251,6 +256,18 @@ body {
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
+.warpIn {
+    animation-name:warpIn;
+    animation-iteration-count:1;
+    animation-duration:200ms;
+    animation-fill-mode:forwards;
+}
+.warpOut {
+    animation-name: warpOut;
+    animation-iteration-count: 1;
+    animation-duration: 200ms;
+    animation-fill-mode: forwards;
+}
 
 /* Key Frames */
 @keyframes expanding{
@@ -260,6 +277,27 @@ body {
 @keyframes collapsing {
     from { height: 649px; }
     to { height: 153px; }
+}
+@keyframes warpIn {
+    from {
+        left:0px;
+        opacity:0;
+    }
+    to {
+        left:10px;
+        opacity:1;
+    }
+}
+@keyframes warpOut {
+    from {
+        left: 10px;
+        opacity: 1;
+    }
+
+    to {
+        left: 0px;
+        opacity: 0;
+    }
 }
 
 /* Media Queries */

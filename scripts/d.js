@@ -58,6 +58,7 @@ var dInner = {
                 this.elems.forEach(function (elem) {
                     elem.innerHTML = newHTML;
                 });
+                return this;
             }
             else {
                 var outHTML = "";
@@ -80,6 +81,7 @@ var dInner = {
             this.elems.forEach(function (elem) {
                 elem.classList.remove(className);
             });
+            return this;
         };
         dInner.dItem.prototype.val = function (valIn) {
             if (!valIn) {

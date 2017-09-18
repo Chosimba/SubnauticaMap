@@ -44,7 +44,7 @@ var SubnauticaMap = {
             SubnauticaMap.setActiveNode(hoverNode);
 
             if (hoverNode === null) return;
-            SubnauticaMap.updateActiveNodeData();
+            SubnauticaMap.updateActiveNodeData(event);
         },
         CanvasMouseMove: function (event) {
             if (SubnauticaMap.isDragging) return;
@@ -70,7 +70,7 @@ var SubnauticaMap = {
 
             if (tempScale <= 10) tempScale = 10;
             else if (tempScale >= 100) tempScale = 100;
-
+            d("#info_holder").removeClass("warpIn")
             SubnauticaMap.main.reScale(tempScale);
         },
         HolderMouseDown: function (event) {
@@ -339,14 +339,12 @@ var SubnauticaMap = {
         });
     },
     types: [],
-    updateActiveNodeData: function () {
+    updateActiveNodeData: function (clickEvent) {
         if (!this.needsUpdate) return;
-
-        var template = d("#node_info_template").html();
-        var node = this.activeNode;
+        var template    = d("#node_info_template").html();
+        var node        = this.activeNode;
         var headerColor = SubnauticaMap.getTypeColor(node.type);
-
-        var freshHTML = Util.str.objReplace(template, {
+        var freshHTML   = Util.str.objReplace(template, {
             x: node.coords.x,
             y: node.coords.y,
             headercolor: headerColor,
@@ -355,7 +353,16 @@ var SubnauticaMap = {
             category: SubnauticaMap.getCategoryText(node.category),
             type: SubnauticaMap.getTypeText(node.type)
         });
-        d("#info_holder").html(freshHTML);
+        var elem        = d("#floating_outer").elems[0];
+
+        elem.style.top  = (clickEvent.layerY + 5) + "px";
+        elem.style.left = (clickEvent.layerX + 5) + "px";
+        d("#info_holder").removeClass("warpIn").html(freshHTML);
+        setTimeout(function () {
+            d("#info_holder").addClass("warpIn");
+        }, 20);
+
+
     }
 };
 
